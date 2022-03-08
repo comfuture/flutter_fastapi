@@ -1,0 +1,17 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "server"
+version = "0.1.0"
+description = "fastapi backend for flutter"
+requires-python = ">=3.9"
+authors = [
+  {email = "comfuture@gmail.com"},
+  {name = "Changkyun Kim"}
+]
+dependencies = [
+  "fastapi",
+  "uvicorn"
+]
