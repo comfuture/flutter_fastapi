@@ -98,7 +98,7 @@ jobs:
       - name: Archive Windows
         uses: actions/upload-artifact@v1
         with:
-          name: web-build
+          name: windows-build
           path: build/windows/runner/Release
   build_web:
     runs-on: ubuntu-latest
