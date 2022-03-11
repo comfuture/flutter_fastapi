@@ -11,7 +11,8 @@
       "console": "debugConsole",
       "program": "lib/main.dart",
       "args": [
-        "-d", "chrome",
+        "-d", "web-server",
+        "--web-hostname", "0.0.0.0",
         "--web-port", "9090"
       ]
     },
@@ -22,7 +23,7 @@
       "console": "integratedTerminal",
       "module": "uvicorn",
       "args": [
-        "main:app",
+        "server:app",
         "--port", "9999",
         "--reload"
       ],
