@@ -73,7 +73,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Build MacOS
-        run: flutter build macos --release
+        run: |
+          flutter config --enable-macos-desktop
+          flutter build macos --release
       - name: Archive MacOS
         uses: actions/upload-artifact@v1
         with:
@@ -89,8 +91,8 @@ jobs:
           channel: stable
       - name: Install dependencies
         run: flutter pub get
-      - name: Build MacOS
-        run: flutter build windows --release --no-codesign
+      - name: Build Windows
+        run: flutter build windows --release
   build_web:
     runs-on: ubuntu-latest
     steps:
@@ -104,6 +106,7 @@ jobs:
       - name: Build Web
         run: |
           flutter build web --release
+          mkdir ./web-release
           cp -r server build ./web-release
       - name: Archive Web
         uses: actions/upload-artifact@v1
