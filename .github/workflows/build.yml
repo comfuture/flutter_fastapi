@@ -82,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: macos-build
-          path: ${{ env.MACOS_APP_RELEASE_PATH }}/Runner.app
+          path: ${{ env.MACOS_APP_RELEASE_PATH }}
   build_windows:
     runs-on: windows-latest
     steps:
