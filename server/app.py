@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI
 from fastapi.logger import logger
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -24,6 +25,10 @@ def create_app():
         nonlocal n
         n += 1
         return {"n": n}
+
+    if os.path.isdir('build/web'):
+        app.mount('/', StaticFiles(directory='build/web', html=True), name='flutter_web')
+        logger.info('Flutter web is mounted')
 
     return app
 
