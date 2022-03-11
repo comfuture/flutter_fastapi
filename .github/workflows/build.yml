@@ -64,6 +64,8 @@ jobs:
       #     path: build/ios/build/Runner.ipa/Runner.ipa
   build_macos:
     runs-on: macos-latest
+    env:
+      MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
       - uses: actions/checkout@v2
       - name: Set up Flutter
@@ -80,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: macos-build
-          path: build/ios/macos/Runner.app
+          path: ${{ MACOS_APP_RELEASE_PATH }}/Runner.app
   build_windows:
     runs-on: windows-latest
     steps:
@@ -93,6 +95,11 @@ jobs:
         run: flutter pub get
       - name: Build Windows
         run: flutter build windows --release
+      - name: Archive Windows
+        uses: actions/upload-artifact@v1
+        with:
+          name: web-build
+          path: build/windows/runner/Release
   build_web:
     runs-on: ubuntu-latest
     steps:
