@@ -40,18 +40,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: stable
       - name: Install dependencies
         run: flutter pub get
       - name: Build IOS
         run: flutter build ios --release --no-codesign
-#      - name: Export IPA
-#        run: |
-#          cd ios
-#          xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
-#          xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
+      # - name: Export IPA
+      #   run: |
+      #     cd ios
+      #     xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
+      #     xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
       # - name: Archive IOS
       #   uses: actions/upload-artifact@v1
       #   with:
@@ -62,9 +62,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: stable
       - name: Install dependencies
         run: flutter pub get
       - name: Build MacOS
@@ -74,7 +74,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
       - name: Install dependencies
@@ -86,10 +86,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: stable
       - name: Install dependencies
         run: flutter pub get
-      - name: Build MacOS
+      - name: Build Web
         run: flutter build web --release
