@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: android-build
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/bundle/release/app-release.aab
   build_ios:
     runs-on: macos-latest
     steps:
@@ -47,6 +47,11 @@ jobs:
         run: flutter pub get
       - name: Build IOS
         run: flutter build ios --release --no-codesign
+      - name: Archive IOS
+        uses: actions/upload-artifact@v1
+        with:
+          name: ios-build
+          path: build/ios/iphoneos/Runner.app
       # - name: Export IPA
       #   run: |
       #     cd ios
@@ -68,7 +73,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Build MacOS
-        run: flutter build macos --release --no-codesign
+        run: flutter build macos --release
+      - name: Archive MacOS
+        uses: actions/upload-artifact@v1
+        with:
+          name: macos-build
+          path: build/ios/macos/Runner.app
   build_windows:
     runs-on: windows-latest
     steps:
@@ -76,11 +86,11 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: stable
       - name: Install dependencies
         run: flutter pub get
       - name: Build MacOS
-        run: flutter build macos --release --no-codesign
+        run: flutter build windows --release --no-codesign
   build_web:
     runs-on: ubuntu-latest
     steps:
@@ -92,4 +102,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Build Web
-        run: flutter build web --release
+        run: |
+          flutter build web --release
+          cp -r server build ./web-release
+      - name: Archive Web
+        uses: actions/upload-artifact@v1
+        with:
+          name: web-build
+          path: ./web-release
