@@ -153,7 +153,8 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: windows-build
-          path: build/windows/runner/Release
+          path: build/windows/x64/runner/Release
+          if-no-files-found: error
 
   build_web:
     runs-on: ubuntu-latest

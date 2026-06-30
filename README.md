@@ -22,7 +22,7 @@ uv sync --frozen
 flutter pub get
 ```
 
-The dev container pins a Flutter/Android image for Flutter `3.44.4`. That image is currently published for `linux/amd64`, so Apple Silicon hosts run it through Docker's amd64 emulation.
+The dev container targets GitHub Codespaces and x64 Linux containers. It does not force Docker to emulate another platform. On Apple Silicon or other arm64 hosts, use the local setup commands below instead of reopening in a container.
 
 For local development without the dev container:
 

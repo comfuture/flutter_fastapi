@@ -1,9 +1,6 @@
 {
 	"name": "Flutter FastAPI",
 	"image": "gmeligio/flutter-android:3.44.4",
-	"runArgs": [
-		"--platform=linux/amd64"
-	],
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"username": "flutter",
