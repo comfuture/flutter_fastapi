@@ -1,17 +1,15 @@
-[build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
-
 [project]
-name = "server"
+name = "flutter-fastapi-server"
 version = "0.1.0"
-description = "fastapi backend for flutter"
-requires-python = ">=3.9"
+description = "FastAPI backend for a Flutter app template"
+requires-python = ">=3.13"
 authors = [
-  {email = "comfuture@gmail.com"},
-  {name = "Changkyun Kim"}
+  { name = "Changkyun Kim", email = "comfuture@gmail.com" }
 ]
 dependencies = [
-  "fastapi",
-  "uvicorn"
+  "fastapi[standard]>=0.138.2,<1.0.0",
+  "uvicorn[standard]>=0.49.0,<1.0.0"
 ]
+
+[tool.uv]
+package = false
