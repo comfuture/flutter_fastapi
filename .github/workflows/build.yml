@@ -14,13 +14,13 @@ jobs:
   test_backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6.3.0
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8.2.0
+        uses: astral-sh/setup-uv@v8
       - name: Install dependencies
         run: uv sync --frozen
       - name: Import FastAPI app
@@ -29,9 +29,9 @@ jobs:
   test_flutter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -48,16 +48,16 @@ jobs:
     needs:
       - test_flutter
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
       # - name: Download Android keystore
       #   id: android_keystore
-      #   uses: timheuer/base64-to-file@v1.0.3
+      #   uses: timheuer/base64-to-file@v1
       #   with:
       #     fileName: key.jks
       #     encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -72,7 +72,7 @@ jobs:
       - name: Build Android App Bundle
         run: flutter build appbundle --release
       - name: Archive Android
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: android-build
           path: build/app/outputs/bundle/release/app-release.aab
@@ -82,9 +82,9 @@ jobs:
     needs:
       - test_flutter
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -94,7 +94,7 @@ jobs:
       - name: Build iOS
         run: flutter build ios --release --no-codesign
       - name: Archive iOS
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: ios-build
           path: build/ios/iphoneos/Runner.app
@@ -104,7 +104,7 @@ jobs:
       #     xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
       #     xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
       # - name: Archive iOS IPA
-      #   uses: actions/upload-artifact@v7.0.1
+      #   uses: actions/upload-artifact@v7
       #   with:
       #     name: ios-build
       #     path: build/ios/build/Runner.ipa/Runner.ipa
@@ -116,9 +116,9 @@ jobs:
     env:
       MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -128,7 +128,7 @@ jobs:
       - name: Build macOS
         run: flutter build macos --release
       - name: Archive macOS
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: macos-build
           path: ${{ env.MACOS_APP_RELEASE_PATH }}
@@ -138,9 +138,9 @@ jobs:
     needs:
       - test_flutter
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -150,7 +150,7 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
       - name: Archive Windows
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: windows-build
           path: build/windows/x64/runner/Release
@@ -162,15 +162,15 @@ jobs:
       - test_backend
       - test_flutter
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6.3.0
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8.2.0
+        uses: astral-sh/setup-uv@v8
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -185,7 +185,7 @@ jobs:
           mkdir ./web-release
           cp -r server build pyproject.toml uv.lock ./web-release
       - name: Archive Web
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: web-build
           path: ./web-release
