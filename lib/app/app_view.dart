@@ -1,25 +1,25 @@
-part of app;
+part of 'app.dart';
 
 class APIClient extends GetConnect {
   @override
   void onInit() {
     super.onInit();
-    bool isDev = !const bool.fromEnvironment('dart.vm.product');
+    final isDev = !const bool.fromEnvironment('dart.vm.product');
     if (isDev) {
       baseUrl = 'http://localhost:9999';
     }
   }
 
-  inc() async {
+  Future<Response<dynamic>> inc() async {
     return post('/inc', {});
   }
 }
 
 class Application extends StatelessWidget {
   final APIClient api = Get.put(APIClient());
-  RxInt num = 0.obs;
+  final RxInt count = 0.obs;
 
-  Application({Key? key}) : super(key: key);
+  Application({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +34,13 @@ class Application extends StatelessWidget {
         ),
         body: Obx(
           () => Center(
-            child: Text('clicked $num times'),
+            child: Text('clicked $count times'),
           ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            var r = await api.inc();
-            num(r.body['n']);
+            final r = await api.inc();
+            count(r.body['n'] as int);
           },
           child: const Icon(Icons.add),
         ),
