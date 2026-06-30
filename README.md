@@ -1,26 +1,47 @@
-# Flutter Fastapi
+# Flutter FastAPI
 
-cross platform Flutter apps template with python fastapi backend
+Cross-platform Flutter app template with a Python FastAPI backend.
+
+## Stack
+
+- Flutter stable `3.44.4`
+- Dart `3.12.2`
+- Python `3.13`
+- FastAPI `0.138.2`
+- uv-managed Python dependencies with a tracked `uv.lock`
 
 ## Getting Started
 
-This project is a starting point for a Flutter application with python api server backend.
+Create a repository from this template and open it in VS Code.
 
-- Create a repository by using this template.
-- Open it in vscode.
-- run `Remote-Container: (Re)open in Container` at command palette.
-- Install dependencies
-  - pip install flit
-  - flit install
-  - flutter pub get
-- Run `Run All` for launch server and app in `Run and Debug` sidebar.
-- (You need to install 'Dart Debug Extension' on Chrome for remote debug.)
+For the recommended environment, run `Dev Containers: Reopen in Container`.
+The dev container installs the Flutter SDK image, Java 21, Python 3.13, the latest uv, and then runs:
 
-### Features
+```sh
+uv sync --frozen
+flutter pub get
+```
 
-- Dev container
-  > this template includes .devcontainer configurations. so you can start development from local docker containers or codespace.
-- Github actions
-  > github actions sample for automated build android, ios, macos, windows and web
-- CORS for web development
-  > api server runs on `:9999` but flutter app runs on `:9090` in development env. it automatically setup cors for incoming requests from flutter only on development env.
+The dev container pins a Flutter/Android image for Flutter `3.44.4`. That image is currently published for `linux/amd64`, so Apple Silicon hosts run it through Docker's amd64 emulation.
+
+For local development without the dev container:
+
+```sh
+uv sync
+flutter pub get
+```
+
+Run both the backend and app from the VS Code `Run All` compound launch configuration, or run them manually:
+
+```sh
+PYTHON_ENV=development uv run uvicorn server:app --port 9999 --reload
+flutter run -d web-server --web-hostname 0.0.0.0 --web-port 9090
+```
+
+## Features
+
+- Dev container configuration based on prebuilt images and Dev Container Features instead of a custom Flutter SDK build.
+- FastAPI backend managed by uv and locked with `uv.lock`.
+- Flutter web development on `:9090` with the FastAPI backend on `:9999`.
+- Development-only CORS for Flutter web requests.
+- GitHub Actions samples for backend checks, Flutter analysis/tests, and Android, iOS, macOS, Windows, and web builds.
