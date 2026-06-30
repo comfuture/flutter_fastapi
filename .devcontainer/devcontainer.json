@@ -32,8 +32,8 @@
 	"remoteEnv": {
 		"PATH": "/home/flutter/sdks/flutter/bin:/home/flutter/sdks/flutter/bin/cache/dart-sdk/bin:/home/flutter/sdks/android-sdk/cmdline-tools/latest/bin:/home/flutter/sdks/android-sdk/platform-tools:${containerEnv:PATH}"
 	},
-	"postCreateCommand": "uv sync --frozen && flutter pub get",
-	"updateContentCommand": "uv sync --frozen && flutter pub get",
+	"postCreateCommand": "uv sync --frozen && flutter config --enable-web && flutter precache --web && flutter pub get",
+	"updateContentCommand": "uv sync --frozen && flutter config --enable-web && flutter pub get",
 	"forwardPorts": [
 		9090,
 		9999
