@@ -10,8 +10,8 @@ class APIClient extends GetConnect {
     }
   }
 
-  Future<Response<dynamic>> inc() async {
-    return post('/inc', {});
+  Future<Response<Map<String, dynamic>>> inc() async {
+    return post<Map<String, dynamic>>('/inc', {});
   }
 }
 
@@ -25,22 +25,21 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter FastAPI'),
-        ),
-        body: Obx(
-          () => Center(
-            child: Text('clicked $count times'),
-          ),
-        ),
+        appBar: AppBar(title: const Text('Flutter FastAPI')),
+        body: Obx(() => Center(child: Text('clicked $count times'))),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             final r = await api.inc();
-            count(r.body['n'] as int);
+            if (r.hasError || r.body == null) {
+              return;
+            }
+
+            final n = r.body!['n'];
+            if (n is int) {
+              count(n);
+            }
           },
           child: const Icon(Icons.add),
         ),
