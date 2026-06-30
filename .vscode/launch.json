@@ -1,7 +1,4 @@
 {
-  // IntelliSense를 사용하여 가능한 특성에 대해 알아보세요.
-  // 기존 특성에 대한 설명을 보려면 가리킵니다.
-  // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
   "version": "0.2.0",
   "configurations": [
     {
@@ -11,20 +8,24 @@
       "console": "debugConsole",
       "program": "lib/main.dart",
       "args": [
-        "-d", "web-server",
-        "--web-hostname", "0.0.0.0",
-        "--web-port", "9090"
+        "-d",
+        "web-server",
+        "--web-hostname",
+        "0.0.0.0",
+        "--web-port",
+        "9090"
       ]
     },
     {
       "name": "Run FastAPI",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "console": "integratedTerminal",
       "module": "uvicorn",
       "args": [
         "server:app",
-        "--port", "9999",
+        "--port",
+        "9999",
         "--reload"
       ],
       "jinja": true,

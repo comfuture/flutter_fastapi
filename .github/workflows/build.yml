@@ -3,17 +3,58 @@ name: build all
 on:
   push:
     branches:
-    - main
+      - main
+  pull_request:
+
+env:
+  FLUTTER_VERSION: "3.44.4"
+  PYTHON_VERSION: "3.13"
 
 jobs:
-  build_android:
+  test_backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v7.0.0
+      - name: Set up Python
+        uses: actions/setup-python@v6.3.0
         with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.2.0
+      - name: Install dependencies
+        run: uv sync --frozen
+      - name: Import FastAPI app
+        run: uv run python -c "from server import app; print(app.title)"
+
+  test_flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.0
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: flutter test
+
+  build_android:
+    runs-on: ubuntu-latest
+    needs:
+      - test_flutter
+    steps:
+      - uses: actions/checkout@v7.0.0
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
       # - name: Download Android keystore
       #   id: android_keystore
       #   uses: timheuer/base64-to-file@v1.0.3
@@ -28,27 +69,32 @@ jobs:
       #     echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
       - name: Install dependencies
         run: flutter pub get
-      - name: Build APK
+      - name: Build Android App Bundle
         run: flutter build appbundle --release
-      - name: Archive APK
-        uses: actions/upload-artifact@v1
+      - name: Archive Android
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: android-build
           path: build/app/outputs/bundle/release/app-release.aab
+
   build_ios:
     runs-on: macos-latest
+    needs:
+      - test_flutter
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.0
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.23.0
         with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
+          cache: true
       - name: Install dependencies
         run: flutter pub get
-      - name: Build IOS
+      - name: Build iOS
         run: flutter build ios --release --no-codesign
-      - name: Archive IOS
-        uses: actions/upload-artifact@v1
+      - name: Archive iOS
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: ios-build
           path: build/ios/iphoneos/Runner.app
@@ -57,66 +103,88 @@ jobs:
       #     cd ios
       #     xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
       #     xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
-      # - name: Archive IOS
-      #   uses: actions/upload-artifact@v1
+      # - name: Archive iOS IPA
+      #   uses: actions/upload-artifact@v7.0.1
       #   with:
       #     name: ios-build
       #     path: build/ios/build/Runner.ipa/Runner.ipa
+
   build_macos:
     runs-on: macos-latest
+    needs:
+      - test_flutter
     env:
       MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.0
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.23.0
         with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
+          cache: true
       - name: Install dependencies
         run: flutter pub get
-      - name: Build MacOS
-        run: |
-          flutter config --enable-macos-desktop
-          flutter build macos --release
-      - name: Archive MacOS
-        uses: actions/upload-artifact@v1
+      - name: Build macOS
+        run: flutter build macos --release
+      - name: Archive macOS
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: macos-build
           path: ${{ env.MACOS_APP_RELEASE_PATH }}
+
   build_windows:
     runs-on: windows-latest
+    needs:
+      - test_flutter
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.0
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.23.0
         with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
+          cache: true
       - name: Install dependencies
         run: flutter pub get
       - name: Build Windows
         run: flutter build windows --release
       - name: Archive Windows
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: windows-build
           path: build/windows/runner/Release
+
   build_web:
     runs-on: ubuntu-latest
+    needs:
+      - test_backend
+      - test_flutter
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v7.0.0
+      - name: Set up Python
+        uses: actions/setup-python@v6.3.0
         with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.2.0
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
+          cache: true
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          uv sync --frozen
+          flutter pub get
       - name: Build Web
         run: |
           flutter build web --release
           mkdir ./web-release
-          cp -r server build ./web-release
+          cp -r server build pyproject.toml uv.lock ./web-release
       - name: Archive Web
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: web-build
           path: ./web-release
